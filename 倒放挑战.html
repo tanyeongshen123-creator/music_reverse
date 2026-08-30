@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 敦大菩提缘 - 听歌倒放挑战 🎵</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+SC:wght@300;450;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #a855f7;
+            --primary-glow: rgba(168, 85, 247, 0.4);
+            --secondary: #3b82f6;
+            --secondary-glow: rgba(59, 130, 246, 0.4);
+            --accent: #10b981;
+            --bg-dark: #09090e;
+            --card-bg: rgba(20, 20, 35, 0.65);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+            background-image: 
+                radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), transparent 45%),
+                radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.15), transparent 45%),
+                linear-gradient(to bottom, rgba(9, 9, 14, 0.85), rgba(9, 9, 14, 0.96)),
+                url('background.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+            background: rgba(15, 15, 25, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            margin-bottom: 8px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 350;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 15px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 10px 22px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Grid of Challenge Levels */
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+            gap: 20px;
+        }
+
+        .level-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.35);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.15);
+        }
+
+        .level-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 3px 9px;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Vinyl Rotate */
+        .vinyl-wrapper {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin: 18px auto 14px auto;
+        }
+
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #2d2d30 25%, #18181b 26%, #18181b 36%, #09090b 37%);
+            border: 3px solid #27272a;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .vinyl-center {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vinyl-center::after {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: #09090b;
+            border-radius: 50%;
+        }
+
+        .vinyl.playing {
+            animation: rotateVinyl 4s linear infinite;
+        }
+
+        /* Progress bar inside card */
+        .card-progress-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 2px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-progress-container.active {
+            opacity: 1;
+        }
+
+        .card-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Card buttons */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-card:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-card.play-rev-btn.playing {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .btn-card.reveal-btn.active {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary-glow);
+        }
+
+        /* Answer panel revealed */
+        .answer-panel {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+            display: none;
+            animation: slideDown 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
+        .answer-panel.show {
+            display: block;
+        }
+
+        .song-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .song-artist {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .btn-play-orig {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            border: none;
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-play-orig:hover {
+            opacity: 0.95;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-play-orig.playing {
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        /* Equalizer Visualizer */
+        .equalizer {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            height: 12px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .equalizer.active {
+            opacity: 1;
+        }
+
+        .equalizer-bar {
+            width: 2px;
+            background: var(--primary);
+            border-radius: 1px;
+            transform-origin: bottom;
+        }
+
+        .equalizer.active .equalizer-bar {
+            animation: bounce 0.8s ease-in-out infinite alternate;
+        }
+
+        .equalizer-bar:nth-child(1) { animation-delay: 0.1s; height: 30%; }
+        .equalizer-bar:nth-child(2) { animation-delay: 0.3s; height: 60%; }
+        .equalizer-bar:nth-child(3) { animation-delay: 0.5s; height: 90%; }
+        .equalizer-bar:nth-child(4) { animation-delay: 0.2s; height: 40%; }
+        .equalizer-bar:nth-child(5) { animation-delay: 0.4s; height: 70%; }
+
+        /* Custom Reverser Tab Layout */
+        .custom-reverser {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(168, 85, 247, 0.04);
+        }
+
+        .upload-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+            display: inline-block;
+        }
+
+        .upload-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .custom-file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .custom-controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-custom {
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-custom-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .btn-custom-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--primary-glow);
+        }
+
+        .btn-custom-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-custom-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-custom-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-custom-accent:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-custom:disabled {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none !important;
+        }
+
+        #status {
+            margin-top: 15px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Toast System */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .toast {
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: toastIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes rotateVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0% { transform: scaleY(0.25); }
+            100% { transform: scaleY(1); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.2); }
+            100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                border-radius: 16px;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+            .levels-grid {
+                grid-template-columns: 1fr;
+            }
+            .upload-area {
+                padding: 25px;
+            }
+        }
+
+        /* Modal Popup styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 10, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 35, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 28px;
+            width: 90%;
+            max-width: 440px;
+            padding: 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        .modal-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        .modal-cover-wrapper {
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            background: linear-gradient(135deg, #1e1e30 0%, #0f0f1b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .modal-cover-wrapper:hover .modal-cover-img {
+            transform: scale(1.05);
+        }
+
+        .modal-cover-placeholder {
+            font-size: 4rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .modal-song-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .modal-song-artist {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .modal-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-btn-play {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .modal-btn-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .modal-btn-play.playing {
+            background: #ef4444;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .modal-btn-play.playing:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="logo-icon">🔮</span>
+            <h1>听歌倒放挑战大厅</h1>
+            <p class="subtitle">敦大菩提缘迎新专属小游戏 • 戴上耳机，听听哪首歌被反转了？</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="challenge" onclick="switchTab('challenge')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
+                <span>关卡挑战</span>
+            </button>
+            <button class="tab-btn" data-tab="custom" onclick="switchTab('custom')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>自助倒放</span>
+            </button>
+        </div>
+
+        <!-- Challenge Levels Tab -->
+        <div id="challengeTab" class="tab-content active">
+            <div class="levels-grid" id="levelsGrid">
+                <!-- Preset cards rendered via javascript -->
+            </div>
+        </div>
+
+        <!-- Custom Upload Tab -->
+        <div id="customTab" class="tab-content">
+            <div class="custom-reverser">
+                <div class="upload-area">
+                    <span class="upload-icon">📤</span>
+                    <p class="upload-text">拖拽或点击上传本地音频文件</p>
+                    <p class="upload-hint">支持 MP3, WAV, M4A 等格式</p>
+                    <input type="file" id="audioInput" class="custom-file-input" accept="audio/*">
+                </div>
+
+                <div id="status">请先上传音频文件</div>
+
+                <div class="custom-controls">
+                    <button class="btn-custom btn-custom-primary" id="playBtn" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <span>播放倒放</span>
+                    </button>
+                    <button class="btn-custom btn-custom-secondary" id="stopBtn" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                        <span>停止播放</span>
+                    </button>
+                    <button class="btn-custom btn-custom-accent" id="downloadBtn" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>下载倒放 WAV</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 敦大菩提缘佛学会 Orientation Party. All rights reserved.
+    </div>
+
+    <!-- Modal for showing answers (Album Art Popup) -->
+    <div class="modal-overlay" id="answerModal" onclick="closeAnswerModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeAnswerModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="modal-badge" id="modalLevelBadge">关卡 01</div>
+            <div class="modal-cover-wrapper">
+                <img src="" alt="Album Cover" class="modal-cover-img" id="modalCoverImg" onerror="handleCoverError(this)">
+                <div class="modal-cover-placeholder" id="modalCoverPlaceholder" style="display: none;">🎵</div>
+            </div>
+            <div class="modal-song-title" id="modalSongTitle">歌曲名称</div>
+            <div class="modal-song-artist" id="modalSongArtist">歌手</div>
+            <div class="modal-controls">
+                <button class="modal-btn-play" id="modalPlayBtn" onclick="toggleModalPlay()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <span>播放原唱</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Preset Songs Database
+        const presetSongs = [
+            { id: 1, title: "跳楼机", artist: "LBI利比", originalUrl: "原音频/跳楼机.mp3", reversedUrl: "倒放音频/跳楼机_倒放.mp3", coverUrl: "image/跳楼机.jpg" },
+            { id: 2, title: "玻璃", artist: "Gareth.T", originalUrl: "原音频/玻璃.mp3", reversedUrl: "倒放音频/玻璃_倒放.mp3", coverUrl: "image/玻璃.jpg" },
+            { id: 3, title: "redred", artist: "CORTIS", originalUrl: "原音频/redred.mp3", reversedUrl: "倒放音频/redred_倒放.mp3", coverUrl: "image/redred.jpg" },
+            { id: 4, title: "apt", artist: "ROSÉ & Bruno Mars", originalUrl: "原音频/apt.mp3", reversedUrl: "倒放音频/apt_倒放.mp3", coverUrl: "image/apt.jpg" },
+            { id: 5, title: "Never Gonna Give You Up", artist: "Rick Astley", originalUrl: "原音频/never gonna give you up.mp3", reversedUrl: "倒放音频/never gonna give you up_倒放.mp3", coverUrl: "image/never gonna give you up.jpg" },
+            { id: 6, title: "恭喜发财", artist: "刘德华", originalUrl: "原音频/恭喜发财.mp3", reversedUrl: "倒放音频/恭喜发财_倒放.mp3", coverUrl: "image/恭喜发财.jpg" },
+            { id: 7, title: "甲乙丙丁", artist: "李佳薇", originalUrl: "原音频/甲乙丙丁.mp3", reversedUrl: "倒放音频/甲乙丙丁_倒放.mp3", coverUrl: "image/甲乙丙丁.jpg" },
+            { id: 8, title: "海屿你", artist: "马也_Crabbit & Cole先生", originalUrl: "原音频/海屿你.mp3", reversedUrl: "倒放音频/海屿你_倒放.mp3", coverUrl: "image/海屿你.jpg" },
+            { id: 9, title: "太阳之子", artist: "周杰伦", originalUrl: "原音频/太阳之子.mp3", reversedUrl: "倒放音频/太阳之子_倒放.mp3", coverUrl: "image/太阳之子.jpg" },
+            { id: 10, title: "海阔天空", artist: "Beyond", originalUrl: "原音频/海阔天空.mp3", reversedUrl: "倒放音频/海阔天空_倒放.mp3", coverUrl: "image/海阔天空.jpg" }
+        ];
+
+        // Sound Manager Singleton
+        const SoundManager = {
+            audio: null,
+            currentLevel: null, // Level ID currently playing preset
+            currentType: null,  // 'reversed' or 'original'
+            customBufferSource: null,
+            customAudioContext: null,
+            isPlayingCustom: false,
+
+            init() {
+                this.audio = new Audio();
+                
+                this.audio.addEventListener('timeupdate', () => {
+                    if (this.currentLevel) {
+                        const progress = (this.audio.currentTime / this.audio.duration) * 100;
+                        const progressBar = document.getElementById(`progress-bar-${this.currentLevel}`);
+                        if (progressBar) {
+                            progressBar.style.width = `${progress || 0}%`;
+                        }
+                    }
+                });
+
+                this.audio.addEventListener('ended', () => {
+                    this.stopAll();
+                });
+
+                this.audio.addEventListener('error', (e) => {
+                    console.error("音频播放遇到错误:", e);
+                    showToast("音频未准备就绪或不存在，请确认脚本下载已完成。");
+                    this.stopAll();
+                });
+            },
+
+            stopAll() {
+                // Stop HTML5 Audio
+                if (this.audio) {
+                    this.audio.pause();
+                    this.audio.src = '';
+                }
+                
+                // Stop Web Audio (for Custom Uploads)
+                if (this.customBufferSource) {
+                    try {
+                        this.customBufferSource.stop();
+                    } catch(e) {}
+                    this.customBufferSource = null;
+                }
+                this.isPlayingCustom = false;
+                
+                // Reset card UI states
+                document.querySelectorAll('.vinyl').forEach(el => el.classList.remove('playing'));
+                document.querySelectorAll('.card-progress-container').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.card-progress-bar').forEach(el => el.style.width = '0%');
+                document.querySelectorAll('.equalizer').forEach(el => el.classList.remove('active'));
+                
+                // Reset preset button states
+                presetSongs.forEach(song => {
+                    const playRevBtn = document.getElementById(`play-rev-btn-${song.id}`);
+                    if (playRevBtn) {
+                        playRevBtn.classList.remove('playing');
+                        playRevBtn.innerHTML = `
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            <span>播放倒放</span>
+                        `;
+                    }
+                    
+                    const playOrigBtn = document.getElementById(`play-orig-btn-${song.id}`);
+                    if (playOrigBtn) {
+                        playOrigBtn.classList.remove('playing');
+                        playOrigBtn.innerHTML = `
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            <span>播放原唱</span>
+                        `;
+                    }
+                });
+
+                // Reset Custom Upload UI controls
+                const playBtn = document.getElementById('playBtn');
+                const stopBtn = document.getElementById('stopBtn');
+                if (playBtn) playBtn.disabled = !reversedBuffer;
+                if (stopBtn) stopBtn.disabled = true;
+                
+                this.currentLevel = null;
+                this.currentType = null;
+                if (typeof updateModalPlayBtnState === 'function') {
+                    updateModalPlayBtnState(false);
+                }
+            },
+
+            playPreset(url, levelId, type) {
+                // Toggle action if exactly the same level and type is active
+                if (this.currentLevel === levelId && this.currentType === type && !this.audio.paused) {
+                    this.stopAll();
+                    return;
+                }
+
+                this.stopAll();
+
+                this.currentLevel = levelId;
+                this.currentType = type;
+                this.audio.src = url;
+                
+                // Visual feedback triggers
+                const vinyl = document.getElementById(`vinyl-${levelId}`);
+                const progressContainer = document.getElementById(`progress-container-${levelId}`);
+                const equalizer = document.getElementById(`equalizer-${levelId}`);
+                
+                if (vinyl) vinyl.classList.add('playing');
+                if (progressContainer) progressContainer.classList.add('active');
+                if (equalizer) equalizer.classList.add('active');
+
+                if (type === 'reversed') {
+                    const btn = document.getElementById(`play-rev-btn-${levelId}`);
+                    if (btn) {
+                        btn.classList.add('playing');
+                        btn.innerHTML = `
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            <span>停止播放</span>
+                        `;
+                    }
+                } else if (type === 'original') {
+                    const btn = document.getElementById(`play-orig-btn-${levelId}`);
+                    if (btn) {
+                        btn.classList.add('playing');
+                        btn.innerHTML = `
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            <span>停止原唱</span>
+                        `;
+                    }
+                    if (typeof updateModalPlayBtnState === 'function' && levelId === modalCurrentSongId) {
+                        updateModalPlayBtnState(true);
+                    }
+                }
+
+                this.audio.play().catch(err => {
+                    console.error("播放音频失败:", err);
+                    showToast("音频文件不存在，请确认后台下载转换脚本运行完毕！");
+                    this.stopAll();
+                });
+            },
+
+            playCustom(buffer) {
+                this.stopAll();
+
+                if (!this.customAudioContext) {
+                    this.customAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                this.customBufferSource = this.customAudioContext.createBufferSource();
+                this.customBufferSource.buffer = buffer;
+                this.customBufferSource.connect(this.customAudioContext.destination);
+
+                this.isPlayingCustom = true;
+                
+                const playBtn = document.getElementById('playBtn');
+                const stopBtn = document.getElementById('stopBtn');
+                if (playBtn) playBtn.disabled = true;
+                if (stopBtn) stopBtn.disabled = false;
+
+                this.customBufferSource.start();
+                
+                this.customBufferSource.onended = () => {
+                    if (this.isPlayingCustom) {
+                        this.stopAll();
+                    }
+                };
+            }
+        };
+
+        // Initialize UI and Sound Manager on window load
+        window.addEventListener('DOMContentLoaded', () => {
+            SoundManager.init();
+            renderLevels();
+        });
+
+        // Render level cards
+        function renderLevels() {
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = '';
+            
+            presetSongs.forEach(song => {
+                const card = document.createElement('div');
+                card.className = 'level-card';
+                card.id = `level-card-${song.id}`;
+                card.innerHTML = `
+                    <span class="level-badge">关卡 ${String(song.id).padStart(2, '0')}</span>
+                    
+                    <div class="vinyl-wrapper">
+                        <div class="vinyl" id="vinyl-${song.id}">
+                            <div class="vinyl-center"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-progress-container" id="progress-container-${song.id}">
+                        <div class="card-progress-bar" id="progress-bar-${song.id}"></div>
+                    </div>
+                    
+                    <div class="equalizer" id="equalizer-${song.id}">
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                        <div class="equalizer-bar"></div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn-card play-rev-btn" id="play-rev-btn-${song.id}" onclick="playLevelReversed(${song.id})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            <span>播放倒放</span>
+                        </button>
+                        <button class="btn-card reveal-btn" id="reveal-btn-${song.id}" onclick="toggleRevealAnswer(${song.id})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                            <span>揭晓答案</span>
+                        </button>
+                    </div>
+                    
+                    <div class="answer-panel" id="answer-${song.id}">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.artist}</div>
+                        <button class="btn-play-orig" id="play-orig-btn-${song.id}" onclick="playLevelOriginal(${song.id})">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            <span>播放原唱</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Action handles
+        function playLevelReversed(id) {
+            const song = presetSongs.find(s => s.id === id);
+            if (song) {
+                SoundManager.playPreset(song.reversedUrl, id, 'reversed');
+            }
+        }
+
+        function playLevelOriginal(id) {
+            const song = presetSongs.find(s => s.id === id);
+            if (song) {
+                SoundManager.playPreset(song.originalUrl, id, 'original');
+            }
+        }
+
+        let modalCurrentSongId = null;
+
+        function showAnswerModal(id) {
+            const song = presetSongs.find(s => s.id === id);
+            if (!song) return;
+
+            modalCurrentSongId = id;
+            
+            // Set content
+            document.getElementById('modalLevelBadge').textContent = `关卡 ${String(song.id).padStart(2, '0')}`;
+            document.getElementById('modalSongTitle').textContent = song.title;
+            document.getElementById('modalSongArtist').textContent = song.artist;
+            
+            const coverImg = document.getElementById('modalCoverImg');
+            const placeholder = document.getElementById('modalCoverPlaceholder');
+            
+            if (song.coverUrl) {
+                coverImg.src = song.coverUrl;
+                coverImg.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                coverImg.style.display = 'none';
+                placeholder.style.display = 'block';
+            }
+
+            // Open overlay
+            const modal = document.getElementById('answerModal');
+            modal.classList.add('active');
+
+            // Play the original song
+            playLevelOriginal(id);
+            updateModalPlayBtnState(true);
+        }
+
+        function closeAnswerModal(event) {
+            const modal = document.getElementById('answerModal');
+            modal.classList.remove('active');
+            
+            // Stop playing the original song
+            SoundManager.stopAll();
+            updateModalPlayBtnState(false);
+            
+            modalCurrentSongId = null;
+        }
+
+        function toggleModalPlay() {
+            if (!modalCurrentSongId) return;
+            
+            const isPlaying = SoundManager.currentLevel === modalCurrentSongId && SoundManager.currentType === 'original' && !SoundManager.audio.paused;
+            
+            if (isPlaying) {
+                SoundManager.stopAll();
+                updateModalPlayBtnState(false);
+            } else {
+                playLevelOriginal(modalCurrentSongId);
+                updateModalPlayBtnState(true);
+            }
+        }
+
+        function updateModalPlayBtnState(isPlaying) {
+            const btn = document.getElementById('modalPlayBtn');
+            if (!btn) return;
+            
+            if (isPlaying) {
+                btn.classList.add('playing');
+                btn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    <span>停止播放</span>
+                `;
+            } else {
+                btn.classList.remove('playing');
+                btn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <span>播放原唱</span>
+                `;
+            }
+        }
+
+        function handleCoverError(img) {
+            img.style.display = 'none';
+            const placeholder = document.getElementById('modalCoverPlaceholder');
+            if (placeholder) {
+                placeholder.style.display = 'block';
+            }
+        }
+
+        function toggleRevealAnswer(id) {
+            showAnswerModal(id);
+        }
+
+        function switchTab(tabName) {
+            SoundManager.stopAll();
+            
+            // Toggle active tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `${tabName}Tab`);
+            });
+        }
+
+        // Toast controller
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            container.innerHTML = '';
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'fadeIn 0.3s ease reverse forwards';
+                setTimeout(() => {
+                    if (toast.parentNode === container) {
+                        container.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // ================= Custom upload tab engine (Fully Backwards Compatible) =================
+        let reversedBuffer = null;
+
+        const fileInput = document.getElementById('audioInput');
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const status = document.getElementById('status');
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            status.textContent = '正在解码与处理音频...';
+            playBtn.disabled = true;
+            downloadBtn.disabled = true;
+
+            try {
+                if (!SoundManager.customAudioContext) {
+                    SoundManager.customAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const arrayBuffer = await file.arrayBuffer();
+                const decodedBuffer = await SoundManager.customAudioContext.decodeAudioData(arrayBuffer);
+
+                // Create reversed AudioBuffer
+                reversedBuffer = SoundManager.customAudioContext.createBuffer(
+                    decodedBuffer.numberOfChannels,
+                    decodedBuffer.length,
+                    decodedBuffer.sampleRate
+                );
+
+                // Process audio channels reversal
+                for (let channel = 0; channel < decodedBuffer.numberOfChannels; channel++) {
+                    const originalData = decodedBuffer.getChannelData(channel);
+                    const reversedData = reversedBuffer.getChannelData(channel);
+                    reversedData.set(originalData);
+                    reversedData.reverse();
+                }
+
+                status.textContent = '倒放处理完成！可以试听或下载。';
+                playBtn.disabled = false;
+                downloadBtn.disabled = false;
+                showToast("自定义音频倒放处理成功！");
+            } catch (err) {
+                console.error(err);
+                status.textContent = '音频解码失败，请换一个格式（如 MP3、WAV）。';
+                showToast("音频解码失败！");
+            }
+        });
+
+        // Controls play/stop/download for custom upload
+        playBtn.addEventListener('click', () => {
+            if (reversedBuffer) {
+                SoundManager.playCustom(reversedBuffer);
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            SoundManager.stopAll();
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (!reversedBuffer) return;
+            const wavBlob = bufferToWave(reversedBuffer, reversedBuffer.length);
+            const url = URL.createObjectURL(wavBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'reversed_audio.wav';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("WAV 倒放文件下载启动！");
+        });
+
+        // WAV file encoding helper
+        function bufferToWave(abuffer, totalSteps) {
+            const numOfChan = abuffer.numberOfChannels;
+            const length = totalSteps * numOfChan * 2 + 44;
+            const out = new DataView(new ArrayBuffer(length));
+            const channels = [];
+            let sample = 0;
+            let offset = 0;
+            let pos = 0;
+
+            function setUint16(data) { out.setUint16(pos, data, true); pos += 2; }
+            function setUint32(data) { out.setUint32(pos, data, true); pos += 4; }
+
+            // WAV Header
+            setUint32(0x46464952); // "RIFF"
+            setUint32(length - 8);  // file length - 8
+            setUint32(0x45564157); // "WAVE"
+            setUint32(0x20746d66); // "fmt " chunk
+            setUint32(16);         // length = 16
+            setUint16(1);          // PCM (uncompressed)
+            setUint16(numOfChan);
+            setUint32(abuffer.sampleRate);
+            setUint32(abuffer.sampleRate * 2 * numOfChan); // byte rate
+            setUint16(numOfChan * 2);                      // block align
+            setUint16(16);                                 // 16-bit
+            setUint32(0x61746164);                         // "data" - chunk
+            setUint32(length - pos - 4);
+
+            for (let i = 0; i < abuffer.numberOfChannels; i++) {
+                channels.push(abuffer.getChannelData(i));
+            }
+
+            while (pos < length) {
+                for (let i = 0; i < numOfChan; i++) {
+                    sample = Math.max(-1, Math.min(1, channels[i][offset]));
+                    sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
+                    out.setInt16(pos, sample, true);
+                    pos += 2;
+                }
+                offset++;
+            }
+            return new Blob([out.buffer], { type: 'audio/wav' });
+        }
+    </script>
+</body>
+
+</html>
