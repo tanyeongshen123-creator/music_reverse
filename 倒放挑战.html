@@ -867,8 +867,7 @@
                 });
 
                 this.audio.addEventListener('error', (e) => {
-                    const src = this.audio.getAttribute('src');
-                    if (!src || src === '') {
+                    if (!this.audio.error) {
                         return;
                     }
                     console.error("音频播放遇到错误:", e);
@@ -881,9 +880,7 @@
                 // Stop HTML5 Audio
                 if (this.audio) {
                     this.audio.pause();
-                    try {
-                        this.audio.currentTime = 0;
-                    } catch (e) {}
+                    this.audio.src = '';
                 }
                 
                 // Stop Web Audio (for Custom Uploads)
