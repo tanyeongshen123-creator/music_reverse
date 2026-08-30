@@ -808,7 +808,7 @@
             </button>
             <div class="modal-badge" id="modalLevelBadge">关卡 01</div>
             <div class="modal-cover-wrapper">
-                <img src="" alt="Album Cover" class="modal-cover-img" id="modalCoverImg" onerror="handleCoverError(this)">
+                <img alt="Album Cover" class="modal-cover-img" id="modalCoverImg">
                 <div class="modal-cover-placeholder" id="modalCoverPlaceholder" style="display: none;">🎵</div>
             </div>
             <div class="modal-song-title" id="modalSongTitle">歌曲名称</div>
@@ -867,6 +867,10 @@
                 });
 
                 this.audio.addEventListener('error', (e) => {
+                    const src = this.audio.getAttribute('src');
+                    if (!src || src === '') {
+                        return;
+                    }
                     console.error("音频播放遇到错误:", e);
                     showToast("音频未准备就绪或不存在，请确认脚本下载已完成。");
                     this.stopAll();
@@ -877,7 +881,9 @@
                 // Stop HTML5 Audio
                 if (this.audio) {
                     this.audio.pause();
-                    this.audio.src = '';
+                    try {
+                        this.audio.currentTime = 0;
+                    } catch (e) {}
                 }
                 
                 // Stop Web Audio (for Custom Uploads)
@@ -1099,6 +1105,8 @@
             
             const coverImg = document.getElementById('modalCoverImg');
             const placeholder = document.getElementById('modalCoverPlaceholder');
+            
+            coverImg.onerror = () => handleCoverError(coverImg);
             
             if (song.coverUrl) {
                 coverImg.src = song.coverUrl;
